@@ -40,6 +40,29 @@ namespace ConsoleApp1
             Environment.Exit(1);
         }
 
+        static string GetString(Encoding encoding, byte[] bytes)
+        {
+            var s = encoding.GetString(bytes);
+
+            var indexNull = s.IndexOf((char)0);
+            if (indexNull != -1)
+            {
+                s = s.Substring(0, indexNull);
+            }
+
+            return s;
+        }
+
+        static string Quote(string value)
+        {
+            return value != null ? $"\"{value}\"" : "null";
+        }
+
+        static string Quote(Encoding encoding, byte[] bytes)
+        {
+            return Quote(GetString(encoding, bytes));
+        }
+
         static void Main(string[] args)
         {
             var devices = HidDevices.Enumerate(VendorId, ProductId);
@@ -82,6 +105,18 @@ namespace ConsoleApp1
             _device1.Inserted += DeviceAttachedHandler;
             _device1.Removed += DeviceRemovedHandler;
             _device1.MonitorDeviceEvents = true;
+
+            byte[] product;
+            _device1.ReadProduct(out product);
+            Console.WriteLine($"product={Quote(Encoding.Unicode, product)}");
+
+            byte[] manufacturer;
+            _device1.ReadManufacturer(out manufacturer);
+            Console.WriteLine($"manufacturer={Quote(Encoding.Unicode, manufacturer)}");
+
+            byte[] serialNumber;
+            _device1.ReadSerialNumber(out serialNumber);
+            Console.WriteLine($"serialNumber={Quote(Encoding.Unicode, serialNumber)}");
 
             Prompt($"{_deviceModel} contoller attached; Press any key to switch...");
 
