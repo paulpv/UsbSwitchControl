@@ -22,10 +22,59 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            Start(Handle);
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            Stop();
+        }
+
         public enum ChangeType
         {
             Add,
             Remove
+        }
+
+        private IntPtr notificationHandle;
+
+        public bool Start(IntPtr windowHandle)
+        {
+            Log.PrintLine(TAG, LogLevel.Information, $"Start(windowHandle={windowHandle})");
+            if (notificationHandle != IntPtr.Zero)
+            {
+                return false;
+            }
+
+            DEV_BROADCAST_DEVICEINTERFACE dbi = new DEV_BROADCAST_DEVICEINTERFACE
+            {
+                dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE,
+                dbcc_classguid = GUID_DEVINTERFACE_USB_DEVICE,
+            };
+
+            dbi.dbcc_size = Marshal.SizeOf(dbi);
+            IntPtr buffer = Marshal.AllocHGlobal(dbi.dbcc_size);
+            Marshal.StructureToPtr(dbi, buffer, true);
+
+            notificationHandle = RegisterDeviceNotification(windowHandle, buffer, 0);
+
+            Marshal.FreeHGlobal(buffer);
+
+            return true;
+        }
+
+        public void Stop()
+        {
+            Log.PrintLine(TAG, LogLevel.Information, "Stop()");
+            if (notificationHandle == IntPtr.Zero)
+            {
+                return;
+            }
+            UnregisterDeviceNotification(notificationHandle);
         }
 
         protected override void WndProc(ref Message m)
@@ -38,7 +87,7 @@ namespace WindowsFormsApp1
                 case WM_DEVICECHANGE:
                     {
                         var wParam = m.WParam.ToInt32();
-                        //Log.PrintLine(TAG, LogLevel.Information, $"WndProc WM_DEVICECHANGE wParam={wParam:X8}");
+                        //Log.PrintLine(TAG, LogLevel.Information, $"WndProc WM_DEVICECHANGE wParam=0x{wParam:X8}");
 
                         /*
                         var serialPorts = SerialPort.GetPortNames().OrderBy(name => name);
@@ -50,11 +99,13 @@ namespace WindowsFormsApp1
 
                         switch (wParam)
                         {
+                            /*
                             case DBT_DEVNODES_CHANGED:
                                 {
-                                    //Log.PrintLine(TAG, LogLevel.Information, "WndProc DBT_DEVNODES_CHANGED");
+                                    Log.PrintLine(TAG, LogLevel.Information, "WndProc DBT_DEVNODES_CHANGED");
                                     break;
                                 }
+                                */
                             case DBT_DEVICEARRIVAL:
                             case DBT_DEVICEREMOVECOMPLETE:
                                 {
