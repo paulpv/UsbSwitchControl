@@ -337,12 +337,10 @@ namespace WindowsFormsApp1
             {
                 string curPnpAddress = (string)device.GetPropertyValue("Dependent");
 
-                // split out the address portion of the data; note that this includes escaped backslashes and quotes
+                // split out the address portion of the data; note that this includes escaped backslashes and start/end quotes
                 curPnpAddress = curPnpAddress.Split(new String[] { "DeviceID=" }, 2, StringSplitOptions.None)[1];
-
-                curPnpAddress = curPnpAddress.Replace("\\\\", "\\");
-
-                curPnpAddress = curPnpAddress.Trim('\"');
+                // remove escaped backslashes and start/end quotes
+                curPnpAddress = curPnpAddress.Replace("\\\\", "\\").Trim('\"');
 
                 Log.PrintLine(TAG, LogLevel.Information, $"FindDevice curPnpAddress={Utils.Quote(curPnpAddress)}");
 
