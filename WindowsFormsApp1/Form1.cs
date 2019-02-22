@@ -26,6 +26,9 @@ using static WindowsFormsApp1.Log;
 
 namespace WindowsFormsApp1
 {
+    /// <summary>
+    /// Interesting: https://github.com/ryancdotorg/gub211
+    /// </summary>
     public partial class Form1 : Form
     {
         private static readonly string TAG = Log.TAG(typeof(Form1));
