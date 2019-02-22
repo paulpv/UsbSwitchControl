@@ -41,7 +41,7 @@ using static WindowsFormsApp1.Log;
 /// 56:32.206 I P3A30 T0001 Form1 WndProc Add    deviceType=5
 /// 56:32.208 I P3A30 T0001 Form1 WndProc Add    pDevice.dbcc_name="\\?\USB#VID_0557&PID_2405#5&2cb50b5c&0&3#{a5dcbf10-6530-11d2-901f-00c04fb951ed}"
 /// Refresh: ....
-/// 56:44.278 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\6&1A3CE924&0&2" *** Swtich A Local
+/// 56:44.278 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\6&1A3CE924&0&2" *** Switch A Local
 /// 56:44.280 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_00\7&3511B330&0&0000"
 /// 56:44.284 I P3A30 T0001 Form1 FindDevice curPnpAddress = "HID\VID_0557&PID_2405&MI_00\8&2ED5FABC&0&0000"
 /// 56:44.285 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_01\7&3511B330&0&0001"
@@ -87,9 +87,8 @@ namespace WindowsFormsApp1
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            DevicesRefresh();
             Start(Handle);
-
-            comboBoxDevices.SelectedIndex = 0;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -372,10 +371,28 @@ namespace WindowsFormsApp1
 
         #endregion Native
 
-        private void buttonDevices_Click(object sender, EventArgs e)
+        private void buttonDevicesRefresh_Click(object sender, EventArgs e)
         {
-            comboBoxDevices.BeginUpdate();
-            comboBoxDevices.Items.Clear();
+            DevicesRefresh();
+        }
+
+        private void DevicesRefresh()
+        {
+            DevicesRefresh(
+                textBoxDevicesFilter.Text,
+                comboBoxDevicesPrimaryLocal,
+                comboBoxDevicesPrimaryRemote,
+                comboBoxDevicesSecondaryLocal,
+                comboBoxDevicesSecondaryRemote);
+        }
+
+        private static void DevicesRefresh(string devicesFilter, params ComboBox[] comboBoxes)
+        {
+            foreach (ComboBox comboBox in comboBoxes)
+            {
+                comboBox.BeginUpdate();
+                comboBox.Items.Clear();
+            }
 
             ManagementObjectCollection usbDeviceAddressInfo = QueryMi(@"Select * from Win32_USBControllerDevice");
 
@@ -388,18 +405,23 @@ namespace WindowsFormsApp1
                 // remove escaped backslashes and start/end quotes
                 curPnpAddress = curPnpAddress.Replace("\\\\", "\\").Trim('\"');
 
-                //Log.PrintLine(TAG, LogLevel.Information, $"FindDevice curPnpAddress={Utils.Quote(curPnpAddress)}");
+                //Log.PrintLine(TAG, LogLevel.Information, $"DevicesRefresh curPnpAddress={Utils.Quote(curPnpAddress)}");
 
-                if (curPnpAddress.Contains("VID_0557&PID_2405"))
+                if (curPnpAddress.Contains(devicesFilter))
                 {
-                    Log.PrintLine(TAG, LogLevel.Information, $"FindDevice curPnpAddress={Utils.Quote(curPnpAddress)}");
-                    comboBoxDevices.Items.Add(curPnpAddress);
+                    Log.PrintLine(TAG, LogLevel.Information, $"DevicesRefresh curPnpAddress={Utils.Quote(curPnpAddress)}");
+                    foreach (ComboBox comboBox in comboBoxes)
+                    {
+                        comboBox.Items.Add(curPnpAddress);
+                    }
                 }
             }
 
-            comboBoxDevices.SelectedIndex = 0;
-
-            comboBoxDevices.EndUpdate();
+            foreach (ComboBox comboBox in comboBoxes)
+            {
+                comboBox.SelectedIndex = 0;
+                comboBox.EndUpdate();
+            }
         }
     }
 }
