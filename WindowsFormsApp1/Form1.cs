@@ -11,6 +11,19 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static WindowsFormsApp1.Log;
 
+/// <summary>
+/// Press Switch A from Remote to Local...
+/// 25:13.661 I P3A98 T0001 Form1 WndProc Remove deviceType=5
+/// 25:13.662 I P3A98 T0001 Form1 WndProc Remove pDevice.dbcc_name="\\?\USB#VID_0557&PID_2405#5&2cb50b5c&0&4#{a5dcbf10-6530-11d2-901f-00c04fb951ed}"
+/// 25:15.806 I P3A98 T0001 Form1 WndProc Add    deviceType=5
+/// 25:15.807 I P3A98 T0001 Form1 WndProc Add    pDevice.dbcc_name="\\?\USB#VID_0557&PID_2405#6&1a3ce924&0&2#{a5dcbf10-6530-11d2-901f-00c04fb951ed}"
+/// Press Switch B from Local to Remote...
+/// 25:34.156 I P3A98 T0001 Form1 WndProc Remove deviceType=5
+/// 25:34.157 I P3A98 T0001 Form1 WndProc Remove pDevice.dbcc_name="\\?\USB#VID_0557&PID_2405#6&783387f&0&2#{a5dcbf10-6530-11d2-901f-00c04fb951ed}"
+/// 25:36.877 I P3A98 T0001 Form1 WndProc Add    deviceType=5
+/// 25:36.877 I P3A98 T0001 Form1 WndProc Add    pDevice.dbcc_name="\\?\USB#VID_0557&PID_2405#5&2cb50b5c&0&3#{a5dcbf10-6530-11d2-901f-00c04fb951ed}"
+/// </summary>
+
 namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
@@ -26,6 +39,8 @@ namespace WindowsFormsApp1
         {
             base.OnLoad(e);
             Start(Handle);
+
+            comboBoxDevices.SelectedIndex = 0;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -307,5 +322,31 @@ namespace WindowsFormsApp1
         private static extern bool UnregisterDeviceNotification(IntPtr handle);
 
         #endregion Native
+
+        private void buttonDevices_Click(object sender, EventArgs e)
+        {
+            comboBoxDevices.BeginUpdate();
+            comboBoxDevices.Items.Clear();
+
+            ManagementObjectCollection usbDeviceAddressInfo = QueryMi(@"Select * from Win32_USBControllerDevice");
+
+            foreach (var device in usbDeviceAddressInfo)
+            {
+                string curPnpAddress = (string)device.GetPropertyValue("Dependent");
+
+                // split out the address portion of the data; note that this includes escaped backslashes and quotes
+                curPnpAddress = curPnpAddress.Split(new String[] { "DeviceID=" }, 2, StringSplitOptions.None)[1];
+
+                curPnpAddress = curPnpAddress.Replace("\\\\", "\\");
+
+                Log.PrintLine(TAG, LogLevel.Information, $"FindDevice curPnpAddress={Utils.Quote(curPnpAddress)}");
+
+                comboBoxDevices.Items.Add(curPnpAddress);
+            }
+
+            comboBoxDevices.SelectedIndex = 0;
+
+            comboBoxDevices.EndUpdate();
+        }
     }
 }
