@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
@@ -6,3 +6,5 @@
 /ConsoleApp1/bin/
 /ConsoleApp1/obj/
 /packages/
+WindowsFormsApp1/bin/
+WindowsFormsApp1/obj/
