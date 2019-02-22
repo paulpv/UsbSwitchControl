@@ -25,12 +25,12 @@ using static WindowsFormsApp1.Log;
 /// 25:36.877 I P3A98 T0001 Form1 WndProc Add    pDevice.dbcc_name="\\?\USB#VID_0557&PID_2405#5&2cb50b5c&0&3#{a5dcbf10-6530-11d2-901f-00c04fb951ed}"
 /// 
 /// Refresh: Switch A & Switch B both on Local...
-/// 56:21.575 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\6&1A3CE924&0&2"
+/// 56:21.575 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\6&1A3CE924&0&2" *** Switch A Local
 /// 56:21.577 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_00\7&3511B330&0&0000"
 /// 56:21.579 I P3A30 T0001 Form1 FindDevice curPnpAddress = "HID\VID_0557&PID_2405&MI_00\8&2ED5FABC&0&0000"
 /// 56:21.580 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_01\7&3511B330&0&0001"
 /// 56:21.582 I P3A30 T0001 Form1 FindDevice curPnpAddress = "HID\VID_0557&PID_2405&MI_01\8&AFEBCFA&0&0000"
-/// 56:21.584 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\6&783387F&0&2"
+/// 56:21.584 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\6&783387F&0&2" *** Switch B Local
 /// 56:21.586 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_00\7&ED64526&0&0000"
 /// 56:21.588 I P3A30 T0001 Form1 FindDevice curPnpAddress = "HID\VID_0557&PID_2405&MI_00\8&1609D4C3&0&0000"
 /// 56:21.590 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_01\7&ED64526&0&0001"
@@ -41,12 +41,12 @@ using static WindowsFormsApp1.Log;
 /// 56:32.206 I P3A30 T0001 Form1 WndProc Add    deviceType=5
 /// 56:32.208 I P3A30 T0001 Form1 WndProc Add    pDevice.dbcc_name="\\?\USB#VID_0557&PID_2405#5&2cb50b5c&0&3#{a5dcbf10-6530-11d2-901f-00c04fb951ed}"
 /// Refresh: ....
-/// 56:44.278 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\6&1A3CE924&0&2"
+/// 56:44.278 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\6&1A3CE924&0&2" *** Swtich A Local
 /// 56:44.280 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_00\7&3511B330&0&0000"
 /// 56:44.284 I P3A30 T0001 Form1 FindDevice curPnpAddress = "HID\VID_0557&PID_2405&MI_00\8&2ED5FABC&0&0000"
 /// 56:44.285 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_01\7&3511B330&0&0001"
 /// 56:44.287 I P3A30 T0001 Form1 FindDevice curPnpAddress = "HID\VID_0557&PID_2405&MI_01\8&AFEBCFA&0&0000"
-/// 56:44.288 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\5&2CB50B5C&0&3"
+/// 56:44.288 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\5&2CB50B5C&0&3" *** Switch B Remote
 /// 56:44.290 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_00\6&BF6FE7E&0&0000"
 /// 56:44.292 I P3A30 T0001 Form1 FindDevice curPnpAddress = "HID\VID_0557&PID_2405&MI_00\7&6500F86&0&0000"
 /// 56:44.294 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_01\6&BF6FE7E&0&0001"
@@ -57,12 +57,12 @@ using static WindowsFormsApp1.Log;
 /// 56:54.147 I P3A30 T0001 Form1 WndProc Add    deviceType=5
 /// 56:54.149 I P3A30 T0001 Form1 WndProc Add    pDevice.dbcc_name="\\?\USB#VID_0557&PID_2405#5&2cb50b5c&0&4#{a5dcbf10-6530-11d2-901f-00c04fb951ed}"
 /// Refresh: ...
-/// 57:06.112 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\5&2CB50B5C&0&3"
+/// 57:06.112 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\5&2CB50B5C&0&3" *** Switch A Remote
 /// 57:06.113 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_00\6&BF6FE7E&0&0000"
 /// 57:06.116 I P3A30 T0001 Form1 FindDevice curPnpAddress = "HID\VID_0557&PID_2405&MI_00\7&6500F86&0&0000"
 /// 57:06.118 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_01\6&BF6FE7E&0&0001"
 /// 57:06.119 I P3A30 T0001 Form1 FindDevice curPnpAddress = "HID\VID_0557&PID_2405&MI_01\7&19802BC4&0&0000"
-/// 57:06.121 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\5&2CB50B5C&0&4"
+/// 57:06.121 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\5&2CB50B5C&0&4" *** Switch B Remote
 /// 57:06.123 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_00\6&1EB0AF23&0&0000"
 /// 57:06.124 I P3A30 T0001 Form1 FindDevice curPnpAddress = "HID\VID_0557&PID_2405&MI_00\7&212B029B&0&0000"
 /// 57:06.126 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_01\6&1EB0AF23&0&0001"
