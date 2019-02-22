@@ -37,12 +37,13 @@
             this.comboBoxDevices.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxDevices.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxDevices.FormattingEnabled = true;
             this.comboBoxDevices.Items.AddRange(new object[] {
             "<- Click to refresh"});
             this.comboBoxDevices.Location = new System.Drawing.Point(93, 12);
             this.comboBoxDevices.Name = "comboBoxDevices";
-            this.comboBoxDevices.Size = new System.Drawing.Size(506, 21);
+            this.comboBoxDevices.Size = new System.Drawing.Size(506, 22);
             this.comboBoxDevices.TabIndex = 0;
             // 
             // buttonDevices

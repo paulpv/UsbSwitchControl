@@ -342,9 +342,14 @@ namespace WindowsFormsApp1
 
                 curPnpAddress = curPnpAddress.Replace("\\\\", "\\");
 
+                curPnpAddress = curPnpAddress.Trim('\"');
+
                 Log.PrintLine(TAG, LogLevel.Information, $"FindDevice curPnpAddress={Utils.Quote(curPnpAddress)}");
 
-                comboBoxDevices.Items.Add(curPnpAddress);
+                if (curPnpAddress.Contains("VID_0557&PID_2405"))
+                {
+                    comboBoxDevices.Items.Add(curPnpAddress);
+                }
             }
 
             comboBoxDevices.SelectedIndex = 0;
