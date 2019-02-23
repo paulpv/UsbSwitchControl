@@ -39,6 +39,7 @@
             this.comboBoxDevicesSecondaryRemote = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxDevicesFilter = new System.Windows.Forms.TextBox();
+            this.buttonDevicesReset = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // comboBoxDevicesPrimaryLocal
@@ -52,14 +53,15 @@
             this.comboBoxDevicesPrimaryLocal.Name = "comboBoxDevicesPrimaryLocal";
             this.comboBoxDevicesPrimaryLocal.Size = new System.Drawing.Size(480, 22);
             this.comboBoxDevicesPrimaryLocal.TabIndex = 0;
+            this.comboBoxDevicesPrimaryLocal.SelectedValueChanged += new System.EventHandler(this.comboBoxDevicesAny_SelectedValueChanged);
             // 
             // buttonDevicesRefresh
             // 
             this.buttonDevicesRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonDevicesRefresh.Location = new System.Drawing.Point(12, 38);
+            this.buttonDevicesRefresh.Location = new System.Drawing.Point(119, 38);
             this.buttonDevicesRefresh.Name = "buttonDevicesRefresh";
-            this.buttonDevicesRefresh.Size = new System.Drawing.Size(587, 23);
+            this.buttonDevicesRefresh.Size = new System.Drawing.Size(480, 23);
             this.buttonDevicesRefresh.TabIndex = 2;
             this.buttonDevicesRefresh.Text = "Refresh Devices";
             this.buttonDevicesRefresh.UseVisualStyleBackColor = true;
@@ -94,6 +96,7 @@
             this.comboBoxDevicesPrimaryRemote.Name = "comboBoxDevicesPrimaryRemote";
             this.comboBoxDevicesPrimaryRemote.Size = new System.Drawing.Size(480, 22);
             this.comboBoxDevicesPrimaryRemote.TabIndex = 4;
+            this.comboBoxDevicesPrimaryRemote.SelectedValueChanged += new System.EventHandler(this.comboBoxDevicesAny_SelectedValueChanged);
             // 
             // label3
             // 
@@ -115,6 +118,7 @@
             this.comboBoxDevicesSecondaryLocal.Name = "comboBoxDevicesSecondaryLocal";
             this.comboBoxDevicesSecondaryLocal.Size = new System.Drawing.Size(480, 22);
             this.comboBoxDevicesSecondaryLocal.TabIndex = 6;
+            this.comboBoxDevicesSecondaryLocal.SelectedValueChanged += new System.EventHandler(this.comboBoxDevicesAny_SelectedValueChanged);
             // 
             // label4
             // 
@@ -136,6 +140,7 @@
             this.comboBoxDevicesSecondaryRemote.Name = "comboBoxDevicesSecondaryRemote";
             this.comboBoxDevicesSecondaryRemote.Size = new System.Drawing.Size(480, 22);
             this.comboBoxDevicesSecondaryRemote.TabIndex = 8;
+            this.comboBoxDevicesSecondaryRemote.SelectedValueChanged += new System.EventHandler(this.comboBoxDevicesAny_SelectedValueChanged);
             // 
             // label5
             // 
@@ -154,11 +159,22 @@
             this.textBoxDevicesFilter.TabIndex = 11;
             this.textBoxDevicesFilter.Text = "VID_0557&PID_2405";
             // 
+            // buttonDevicesReset
+            // 
+            this.buttonDevicesReset.Location = new System.Drawing.Point(10, 38);
+            this.buttonDevicesReset.Name = "buttonDevicesReset";
+            this.buttonDevicesReset.Size = new System.Drawing.Size(103, 23);
+            this.buttonDevicesReset.TabIndex = 12;
+            this.buttonDevicesReset.Text = "Reset Devices";
+            this.buttonDevicesReset.UseVisualStyleBackColor = true;
+            this.buttonDevicesReset.Click += new System.EventHandler(this.buttonDevicesReset_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(611, 234);
+            this.Controls.Add(this.buttonDevicesReset);
             this.Controls.Add(this.textBoxDevicesFilter);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -190,6 +206,7 @@
         private System.Windows.Forms.ComboBox comboBoxDevicesSecondaryRemote;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBoxDevicesFilter;
+        private System.Windows.Forms.Button buttonDevicesReset;
     }
 }
 

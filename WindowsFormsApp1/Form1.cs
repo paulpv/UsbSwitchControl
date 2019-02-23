@@ -386,7 +386,7 @@ namespace WindowsFormsApp1
                 comboBoxDevicesSecondaryRemote);
         }
 
-        private static void DevicesRefresh(string devicesFilter, params ComboBox[] comboBoxes)
+        private void DevicesRefresh(string devicesFilter, params ComboBox[] comboBoxes)
         {
             foreach (ComboBox comboBox in comboBoxes)
             {
@@ -407,21 +407,159 @@ namespace WindowsFormsApp1
 
                 //Log.PrintLine(TAG, LogLevel.Information, $"DevicesRefresh curPnpAddress={Utils.Quote(curPnpAddress)}");
 
-                if (curPnpAddress.Contains(devicesFilter))
+                if (!curPnpAddress.Contains(devicesFilter))
                 {
-                    Log.PrintLine(TAG, LogLevel.Information, $"DevicesRefresh curPnpAddress={Utils.Quote(curPnpAddress)}");
-                    foreach (ComboBox comboBox in comboBoxes)
+                    continue;
+                }
+
+                Log.PrintLine(TAG, LogLevel.Information, $"DevicesRefresh curPnpAddress={Utils.Quote(curPnpAddress)}");
+                foreach (ComboBox comboBox in comboBoxes)
+                {
+                    comboBox.Items.Add(curPnpAddress);
+                    switch (comboBox.Name)
                     {
-                        comboBox.Items.Add(curPnpAddress);
+                        case "comboBoxDevicesPrimaryLocal":
+                            if (curPnpAddress == SelectedDevicePrimaryLocal)
+                            {
+                                comboBox.SelectedItem = curPnpAddress;
+                            }
+                            break;
+                        case "comboBoxDevicesPrimaryRemote":
+                            if (curPnpAddress == SelectedDevicePrimaryRemote)
+                            {
+                                comboBox.SelectedItem = curPnpAddress;
+                            }
+                            break;
+                        case "comboBoxDevicesSecondaryLocal":
+                            if (curPnpAddress == SelectedDeviceSecondaryLocal)
+                            {
+                                comboBox.SelectedItem = curPnpAddress;
+                            }
+                            break;
+                        case "comboBoxDevicesSecondaryRemote":
+                            if (curPnpAddress == SelectedDeviceSecondaryRemote)
+                            {
+                                comboBox.SelectedItem = curPnpAddress;
+                            }
+                            break;
                     }
                 }
             }
 
             foreach (ComboBox comboBox in comboBoxes)
             {
-                comboBox.SelectedIndex = 0;
                 comboBox.EndUpdate();
             }
+        }
+
+        private void comboBoxDevicesAny_SelectedValueChanged(object sender, EventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+            if (comboBox == null)
+            {
+                return;
+            }
+
+            string selectedValue = comboBox.SelectedItem as string;
+
+            switch(comboBox.Name)
+            {
+                case "comboBoxDevicesPrimaryLocal":
+                    SelectedDevicePrimaryLocal = selectedValue;
+                    break;
+                case "comboBoxDevicesPrimaryRemote":
+                    SelectedDevicePrimaryRemote = selectedValue;
+                    break;
+                case "comboBoxDevicesSecondaryLocal":
+                    SelectedDeviceSecondaryLocal = selectedValue;
+                    break;
+                case "comboBoxDevicesSecondaryRemote":
+                    SelectedDeviceSecondaryRemote = selectedValue;
+                    break;
+            }
+        }
+
+        private string SelectedDevicePrimaryLocal
+        {
+            get
+            {
+                var deviceId = Properties.Settings.Default.SelectedDevicePrimaryLocal;
+                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDevicePrimaryLocal get deviceId={Utils.Quote(deviceId)}");
+                return deviceId;
+            }
+            set
+            {
+                var deviceId = value;
+                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDevicePrimaryLocal set deviceId={Utils.Quote(deviceId)}");
+                var settings = Properties.Settings.Default;
+                settings.SelectedDevicePrimaryLocal = deviceId;
+                settings.Save();
+            }
+        }
+
+        private string SelectedDevicePrimaryRemote
+        {
+            get
+            {
+                var deviceId = Properties.Settings.Default.SelectedDevicePrimaryRemote;
+                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDevicePrimaryRemote get deviceId={Utils.Quote(deviceId)}");
+                return deviceId;
+            }
+            set
+            {
+                var deviceId = value;
+                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDevicePrimaryRemote set deviceId={Utils.Quote(deviceId)}");
+                var settings = Properties.Settings.Default;
+                settings.SelectedDevicePrimaryRemote = deviceId;
+                settings.Save();
+            }
+        }
+
+        private string SelectedDeviceSecondaryLocal
+        {
+            get
+            {
+                var deviceId = Properties.Settings.Default.SelectedDeviceSecondaryLocal;
+                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDeviceSecondaryLocal get deviceId={Utils.Quote(deviceId)}");
+                return deviceId;
+            }
+            set
+            {
+                var deviceId = value;
+                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDeviceSecondaryLocal set deviceId={Utils.Quote(deviceId)}");
+                var settings = Properties.Settings.Default;
+                settings.SelectedDeviceSecondaryLocal = deviceId;
+                settings.Save();
+            }
+        }
+
+        private string SelectedDeviceSecondaryRemote
+        {
+            get
+            {
+                var deviceId = Properties.Settings.Default.SelectedDeviceSecondaryRemote;
+                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDeviceSecondaryRemote get deviceId={Utils.Quote(deviceId)}");
+                return deviceId;
+            }
+            set
+            {
+                var deviceId = value;
+                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDeviceSecondaryRemote set deviceId={Utils.Quote(deviceId)}");
+                var settings = Properties.Settings.Default;
+                settings.SelectedDeviceSecondaryRemote = deviceId;
+                settings.Save();
+            }
+        }
+
+        private void buttonDevicesReset_Click(object sender, EventArgs e)
+        {
+            var settings = Properties.Settings.Default;
+            settings.SelectedDevicePrimaryLocal = null;
+            settings.SelectedDevicePrimaryRemote = null;
+            settings.SelectedDeviceSecondaryLocal = null;
+            settings.SelectedDeviceSecondaryRemote = null;
+            settings.Save();
+            DevicesRefresh();
         }
     }
 }
