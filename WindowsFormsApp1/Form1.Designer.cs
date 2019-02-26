@@ -202,6 +202,7 @@
             this.buttonDeviceSecondaryLocalSwitch.TabIndex = 15;
             this.buttonDeviceSecondaryLocalSwitch.Text = "Switch";
             this.buttonDeviceSecondaryLocalSwitch.UseVisualStyleBackColor = true;
+            this.buttonDeviceSecondaryLocalSwitch.Click += new System.EventHandler(this.buttonDeviceAnySwitch_Click);
             // 
             // buttonDeviceSecondaryRemoteSwitch
             // 
@@ -211,6 +212,7 @@
             this.buttonDeviceSecondaryRemoteSwitch.TabIndex = 16;
             this.buttonDeviceSecondaryRemoteSwitch.Text = "Switch";
             this.buttonDeviceSecondaryRemoteSwitch.UseVisualStyleBackColor = true;
+            this.buttonDeviceSecondaryRemoteSwitch.Click += new System.EventHandler(this.buttonDeviceAnySwitch_Click);
             // 
             // Form1
             // 
