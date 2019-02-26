@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HidLibrary;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,6 +25,13 @@ using static WindowsFormsApp1.Log;
 /// 25:36.877 I P3A98 T0001 Form1 WndProc Add    deviceType=5
 /// 25:36.877 I P3A98 T0001 Form1 WndProc Add    pDevice.dbcc_name="\\?\USB#VID_0557&PID_2405#5&2cb50b5c&0&3#{a5dcbf10-6530-11d2-901f-00c04fb951ed}"
 /// 
+/// DevicePath "\\\\?\\hid#vid_0557&pid_2405&mi_01#7&2ac3b27&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}"
+///                   "hid\vid_0557&pid_2405&mi_01\7&2ac3b27&0&0000"
+
+/// DevicePath "\\\\?\\hid#vid_0557&pid_2405&mi_01#7&19802bc4&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}"
+///                   "hid\vid_0557&pid_2405&mi_01\7&19802bc4&0&0000"
+
+///
 /// Refresh: Switch A & Switch B both on Local...
 /// 56:21.575 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405\6&1A3CE924&0&2" *** Switch A Local
 /// 56:21.577 I P3A30 T0001 Form1 FindDevice curPnpAddress = "USB\VID_0557&PID_2405&MI_00\7&3511B330&0&0000"
@@ -275,6 +283,7 @@ namespace WindowsFormsApp1
             foreach (var device in usbDeviceAddressInfo)
             {
                 string curPnpAddress = (string)device.GetPropertyValue("Dependent");
+                //Log.PrintLine(TAG, LogLevel.Information, $"FindDevice curPnpAddress={Utils.Quote(curPnpAddress)}");
 
                 // split out the address portion of the data; note that this includes escaped backslashes and quotes
                 curPnpAddress = curPnpAddress.Split(new String[] { "DeviceID=" }, 2, StringSplitOptions.None)[1];
@@ -388,58 +397,54 @@ namespace WindowsFormsApp1
 
         private void DevicesRefresh(string devicesFilter, params ComboBox[] comboBoxes)
         {
+            devicesFilter = devicesFilter.ToLower();
+
             foreach (ComboBox comboBox in comboBoxes)
             {
                 comboBox.BeginUpdate();
                 comboBox.Items.Clear();
             }
 
-            ManagementObjectCollection usbDeviceAddressInfo = QueryMi(@"Select * from Win32_USBControllerDevice");
+            var devices = HidLibraryExt.Enumerate(0x0557, 0x2405, 0x00003102);
 
-            foreach (var device in usbDeviceAddressInfo)
+            foreach (var device in devices)
             {
-                string curPnpAddress = (string)device.GetPropertyValue("Dependent");
+                var devicePath = device.DevicePath;
+                //Log.PrintLine(TAG, LogLevel.Information, $"DevicesRefresh devicePath={Utils.Quote(devicePath)}");
 
-                // split out the address portion of the data; note that this includes escaped backslashes and start/end quotes
-                curPnpAddress = curPnpAddress.Split(new String[] { "DeviceID=" }, 2, StringSplitOptions.None)[1];
-                // remove escaped backslashes and start/end quotes
-                curPnpAddress = curPnpAddress.Replace("\\\\", "\\").Trim('\"');
-
-                //Log.PrintLine(TAG, LogLevel.Information, $"DevicesRefresh curPnpAddress={Utils.Quote(curPnpAddress)}");
-
-                if (!curPnpAddress.Contains(devicesFilter))
+                if (!devicePath.ToLower().Contains(devicesFilter))
                 {
                     continue;
                 }
 
-                Log.PrintLine(TAG, LogLevel.Information, $"DevicesRefresh curPnpAddress={Utils.Quote(curPnpAddress)}");
+                Log.PrintLine(TAG, LogLevel.Information, $"DevicesRefresh devicePath={Utils.Quote(devicePath)}");
                 foreach (ComboBox comboBox in comboBoxes)
                 {
-                    comboBox.Items.Add(curPnpAddress);
+                    comboBox.Items.Add(devicePath);
                     switch (comboBox.Name)
                     {
                         case "comboBoxDevicesPrimaryLocal":
-                            if (curPnpAddress == SelectedDevicePrimaryLocal)
+                            if (devicePath == SelectedDevicePrimaryLocal)
                             {
-                                comboBox.SelectedItem = curPnpAddress;
+                                comboBox.SelectedItem = devicePath;
                             }
                             break;
                         case "comboBoxDevicesPrimaryRemote":
-                            if (curPnpAddress == SelectedDevicePrimaryRemote)
+                            if (devicePath == SelectedDevicePrimaryRemote)
                             {
-                                comboBox.SelectedItem = curPnpAddress;
+                                comboBox.SelectedItem = devicePath;
                             }
                             break;
                         case "comboBoxDevicesSecondaryLocal":
-                            if (curPnpAddress == SelectedDeviceSecondaryLocal)
+                            if (devicePath == SelectedDeviceSecondaryLocal)
                             {
-                                comboBox.SelectedItem = curPnpAddress;
+                                comboBox.SelectedItem = devicePath;
                             }
                             break;
                         case "comboBoxDevicesSecondaryRemote":
-                            if (curPnpAddress == SelectedDeviceSecondaryRemote)
+                            if (devicePath == SelectedDeviceSecondaryRemote)
                             {
-                                comboBox.SelectedItem = curPnpAddress;
+                                comboBox.SelectedItem = devicePath;
                             }
                             break;
                     }
@@ -484,13 +489,13 @@ namespace WindowsFormsApp1
             get
             {
                 var deviceId = Properties.Settings.Default.SelectedDevicePrimaryLocal;
-                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDevicePrimaryLocal get deviceId={Utils.Quote(deviceId)}");
+                //Log.PrintLine(TAG, LogLevel.Information, $"SelectedDevicePrimaryLocal get deviceId={Utils.Quote(deviceId)}");
                 return deviceId;
             }
             set
             {
                 var deviceId = value;
-                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDevicePrimaryLocal set deviceId={Utils.Quote(deviceId)}");
+                //Log.PrintLine(TAG, LogLevel.Information, $"SelectedDevicePrimaryLocal set deviceId={Utils.Quote(deviceId)}");
                 var settings = Properties.Settings.Default;
                 settings.SelectedDevicePrimaryLocal = deviceId;
                 settings.Save();
@@ -502,13 +507,13 @@ namespace WindowsFormsApp1
             get
             {
                 var deviceId = Properties.Settings.Default.SelectedDevicePrimaryRemote;
-                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDevicePrimaryRemote get deviceId={Utils.Quote(deviceId)}");
+                //Log.PrintLine(TAG, LogLevel.Information, $"SelectedDevicePrimaryRemote get deviceId={Utils.Quote(deviceId)}");
                 return deviceId;
             }
             set
             {
                 var deviceId = value;
-                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDevicePrimaryRemote set deviceId={Utils.Quote(deviceId)}");
+                //Log.PrintLine(TAG, LogLevel.Information, $"SelectedDevicePrimaryRemote set deviceId={Utils.Quote(deviceId)}");
                 var settings = Properties.Settings.Default;
                 settings.SelectedDevicePrimaryRemote = deviceId;
                 settings.Save();
@@ -520,13 +525,13 @@ namespace WindowsFormsApp1
             get
             {
                 var deviceId = Properties.Settings.Default.SelectedDeviceSecondaryLocal;
-                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDeviceSecondaryLocal get deviceId={Utils.Quote(deviceId)}");
+                //Log.PrintLine(TAG, LogLevel.Information, $"SelectedDeviceSecondaryLocal get deviceId={Utils.Quote(deviceId)}");
                 return deviceId;
             }
             set
             {
                 var deviceId = value;
-                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDeviceSecondaryLocal set deviceId={Utils.Quote(deviceId)}");
+                //Log.PrintLine(TAG, LogLevel.Information, $"SelectedDeviceSecondaryLocal set deviceId={Utils.Quote(deviceId)}");
                 var settings = Properties.Settings.Default;
                 settings.SelectedDeviceSecondaryLocal = deviceId;
                 settings.Save();
@@ -538,13 +543,13 @@ namespace WindowsFormsApp1
             get
             {
                 var deviceId = Properties.Settings.Default.SelectedDeviceSecondaryRemote;
-                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDeviceSecondaryRemote get deviceId={Utils.Quote(deviceId)}");
+                //Log.PrintLine(TAG, LogLevel.Information, $"SelectedDeviceSecondaryRemote get deviceId={Utils.Quote(deviceId)}");
                 return deviceId;
             }
             set
             {
                 var deviceId = value;
-                Log.PrintLine(TAG, LogLevel.Information, $"SelectedDeviceSecondaryRemote set deviceId={Utils.Quote(deviceId)}");
+                //Log.PrintLine(TAG, LogLevel.Information, $"SelectedDeviceSecondaryRemote set deviceId={Utils.Quote(deviceId)}");
                 var settings = Properties.Settings.Default;
                 settings.SelectedDeviceSecondaryRemote = deviceId;
                 settings.Save();
@@ -560,6 +565,51 @@ namespace WindowsFormsApp1
             settings.SelectedDeviceSecondaryRemote = null;
             settings.Save();
             DevicesRefresh();
+        }
+
+        private void buttonDeviceAnySwitch_Click(object sender, EventArgs e)
+        {
+            //var devicePath = comboBoxDevicesPrimaryRemote.SelectedItem as string;
+            //var hidDevice = new HidDevice(deviceName);
+            //var device = HidDevices.GetDevice(devicePath);
+            var devices = HidLibraryExt.Enumerate(0x0557, 0x2405, 0x00003102);
+            // DevicePath "\\\\?\\hid#vid_0557&pid_2405&mi_01#7&2ac3b27&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}"
+            // DevicePath "\\\\?\\hid#vid_0557&pid_2405&mi_01#7&19802bc4&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}"
+            foreach (var device in devices)
+            {
+                SendCmdToSwitch(device, Gub231SwitchCommands.Switch);
+            }
+        }
+
+        private enum Gub231SwitchCommands
+        {
+            Cancel = 0x10, // CMD_CANCEL
+            Switch = 0x11, // CMD_SWITCH
+            Lock = 0x21,   // CMD_LOCK
+            Unlock = 0x20  // CMD_UNLOCK
+        }
+
+        /// <summary>
+        /// Reverse engineering GUB231 USwitch.exe
+        /// Look for method "SendCmdToSwitch"
+        /// Using x32dbg
+        /// Add plugin "API Break" https://github.com/0ffffffffh/Api-Break-for-x64dbg/releases
+        /// Set breakpoint in:
+        ///     kernel32.dll WriteFile
+        ///     kernel32.dll OutputDebugStringW
+        /// 00AD6FFA | 68 9872AE00              | push uswitch.AE7298                     | AE7298:L"SendCmdToSwitch(CMD_CANCEL) 0x10.case CMD_CANCEL"
+        /// 00AD7043 | 68 3072AE00              | push uswitch.AE7230                     | AE7230:L"SendCmdToSwitch(CMD_SWITCH) 0x11.case CMD_SWITCH"
+        /// 00AD7069 | 68 D071AE00              | push uswitch.AE71D0                     | AE71D0:L"SendCmdToSwitch(CMD_LOCK) 0x21.case CMD_LOCK"
+        /// 00AD70A6 | 68 6871AE00              | push uswitch.AE7168                     | AE7168:L"SendCmdToSwitch(CMD_UNLOCK) 0x20.case CMD_UNLOCK"
+        /// </summary>
+        /// <param name="device"></param>
+        /// <param name="cmd"></param>
+        private void SendCmdToSwitch(HidDevice device, Gub231SwitchCommands cmd)
+        {
+            Log.PrintLine(TAG, LogLevel.Information, $"SendCmdToSwitch device.DevicePath={Utils.Quote(device.DevicePath)} cmd={cmd}");
+            device.OpenDevice();
+            device.WriteReport(new HidReport(2, new HidDeviceData(new byte[] { 0x02, (byte)cmd }, HidDeviceData.ReadStatus.Success)));
+            device.CloseDevice();
         }
     }
 }

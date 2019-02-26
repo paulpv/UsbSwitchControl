@@ -40,6 +40,10 @@
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxDevicesFilter = new System.Windows.Forms.TextBox();
             this.buttonDevicesReset = new System.Windows.Forms.Button();
+            this.buttonDevicePrimaryLocalSwitch = new System.Windows.Forms.Button();
+            this.buttonDevicePrimaryRemoteSwitch = new System.Windows.Forms.Button();
+            this.buttonDeviceSecondaryLocalSwitch = new System.Windows.Forms.Button();
+            this.buttonDeviceSecondaryRemoteSwitch = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // comboBoxDevicesPrimaryLocal
@@ -51,7 +55,7 @@
             this.comboBoxDevicesPrimaryLocal.FormattingEnabled = true;
             this.comboBoxDevicesPrimaryLocal.Location = new System.Drawing.Point(119, 67);
             this.comboBoxDevicesPrimaryLocal.Name = "comboBoxDevicesPrimaryLocal";
-            this.comboBoxDevicesPrimaryLocal.Size = new System.Drawing.Size(480, 22);
+            this.comboBoxDevicesPrimaryLocal.Size = new System.Drawing.Size(399, 22);
             this.comboBoxDevicesPrimaryLocal.TabIndex = 0;
             this.comboBoxDevicesPrimaryLocal.SelectedValueChanged += new System.EventHandler(this.comboBoxDevicesAny_SelectedValueChanged);
             // 
@@ -61,7 +65,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonDevicesRefresh.Location = new System.Drawing.Point(119, 38);
             this.buttonDevicesRefresh.Name = "buttonDevicesRefresh";
-            this.buttonDevicesRefresh.Size = new System.Drawing.Size(480, 23);
+            this.buttonDevicesRefresh.Size = new System.Drawing.Size(399, 23);
             this.buttonDevicesRefresh.TabIndex = 2;
             this.buttonDevicesRefresh.Text = "Refresh Devices";
             this.buttonDevicesRefresh.UseVisualStyleBackColor = true;
@@ -94,7 +98,7 @@
             this.comboBoxDevicesPrimaryRemote.FormattingEnabled = true;
             this.comboBoxDevicesPrimaryRemote.Location = new System.Drawing.Point(119, 95);
             this.comboBoxDevicesPrimaryRemote.Name = "comboBoxDevicesPrimaryRemote";
-            this.comboBoxDevicesPrimaryRemote.Size = new System.Drawing.Size(480, 22);
+            this.comboBoxDevicesPrimaryRemote.Size = new System.Drawing.Size(399, 22);
             this.comboBoxDevicesPrimaryRemote.TabIndex = 4;
             this.comboBoxDevicesPrimaryRemote.SelectedValueChanged += new System.EventHandler(this.comboBoxDevicesAny_SelectedValueChanged);
             // 
@@ -116,7 +120,7 @@
             this.comboBoxDevicesSecondaryLocal.FormattingEnabled = true;
             this.comboBoxDevicesSecondaryLocal.Location = new System.Drawing.Point(119, 123);
             this.comboBoxDevicesSecondaryLocal.Name = "comboBoxDevicesSecondaryLocal";
-            this.comboBoxDevicesSecondaryLocal.Size = new System.Drawing.Size(480, 22);
+            this.comboBoxDevicesSecondaryLocal.Size = new System.Drawing.Size(399, 22);
             this.comboBoxDevicesSecondaryLocal.TabIndex = 6;
             this.comboBoxDevicesSecondaryLocal.SelectedValueChanged += new System.EventHandler(this.comboBoxDevicesAny_SelectedValueChanged);
             // 
@@ -138,7 +142,7 @@
             this.comboBoxDevicesSecondaryRemote.FormattingEnabled = true;
             this.comboBoxDevicesSecondaryRemote.Location = new System.Drawing.Point(119, 151);
             this.comboBoxDevicesSecondaryRemote.Name = "comboBoxDevicesSecondaryRemote";
-            this.comboBoxDevicesSecondaryRemote.Size = new System.Drawing.Size(480, 22);
+            this.comboBoxDevicesSecondaryRemote.Size = new System.Drawing.Size(399, 22);
             this.comboBoxDevicesSecondaryRemote.TabIndex = 8;
             this.comboBoxDevicesSecondaryRemote.SelectedValueChanged += new System.EventHandler(this.comboBoxDevicesAny_SelectedValueChanged);
             // 
@@ -157,7 +161,8 @@
             this.textBoxDevicesFilter.Name = "textBoxDevicesFilter";
             this.textBoxDevicesFilter.Size = new System.Drawing.Size(480, 20);
             this.textBoxDevicesFilter.TabIndex = 11;
-            this.textBoxDevicesFilter.Text = "VID_0557&PID_2405";
+            this.textBoxDevicesFilter.Tag = "VID_0557&PID_2405";
+            this.textBoxDevicesFilter.Text = "\\\\?\\hid#vid_0557&pid_2405&mi_01";
             // 
             // buttonDevicesReset
             // 
@@ -169,11 +174,53 @@
             this.buttonDevicesReset.UseVisualStyleBackColor = true;
             this.buttonDevicesReset.Click += new System.EventHandler(this.buttonDevicesReset_Click);
             // 
+            // buttonDevicePrimaryLocalSwitch
+            // 
+            this.buttonDevicePrimaryLocalSwitch.Location = new System.Drawing.Point(524, 67);
+            this.buttonDevicePrimaryLocalSwitch.Name = "buttonDevicePrimaryLocalSwitch";
+            this.buttonDevicePrimaryLocalSwitch.Size = new System.Drawing.Size(75, 23);
+            this.buttonDevicePrimaryLocalSwitch.TabIndex = 13;
+            this.buttonDevicePrimaryLocalSwitch.Text = "Switch";
+            this.buttonDevicePrimaryLocalSwitch.UseVisualStyleBackColor = true;
+            this.buttonDevicePrimaryLocalSwitch.Click += new System.EventHandler(this.buttonDeviceAnySwitch_Click);
+            // 
+            // buttonDevicePrimaryRemoteSwitch
+            // 
+            this.buttonDevicePrimaryRemoteSwitch.Location = new System.Drawing.Point(524, 93);
+            this.buttonDevicePrimaryRemoteSwitch.Name = "buttonDevicePrimaryRemoteSwitch";
+            this.buttonDevicePrimaryRemoteSwitch.Size = new System.Drawing.Size(75, 23);
+            this.buttonDevicePrimaryRemoteSwitch.TabIndex = 14;
+            this.buttonDevicePrimaryRemoteSwitch.Text = "Switch";
+            this.buttonDevicePrimaryRemoteSwitch.UseVisualStyleBackColor = true;
+            this.buttonDevicePrimaryRemoteSwitch.Click += new System.EventHandler(this.buttonDeviceAnySwitch_Click);
+            // 
+            // buttonDeviceSecondaryLocalSwitch
+            // 
+            this.buttonDeviceSecondaryLocalSwitch.Location = new System.Drawing.Point(524, 122);
+            this.buttonDeviceSecondaryLocalSwitch.Name = "buttonDeviceSecondaryLocalSwitch";
+            this.buttonDeviceSecondaryLocalSwitch.Size = new System.Drawing.Size(75, 23);
+            this.buttonDeviceSecondaryLocalSwitch.TabIndex = 15;
+            this.buttonDeviceSecondaryLocalSwitch.Text = "Switch";
+            this.buttonDeviceSecondaryLocalSwitch.UseVisualStyleBackColor = true;
+            // 
+            // buttonDeviceSecondaryRemoteSwitch
+            // 
+            this.buttonDeviceSecondaryRemoteSwitch.Location = new System.Drawing.Point(524, 151);
+            this.buttonDeviceSecondaryRemoteSwitch.Name = "buttonDeviceSecondaryRemoteSwitch";
+            this.buttonDeviceSecondaryRemoteSwitch.Size = new System.Drawing.Size(75, 23);
+            this.buttonDeviceSecondaryRemoteSwitch.TabIndex = 16;
+            this.buttonDeviceSecondaryRemoteSwitch.Text = "Switch";
+            this.buttonDeviceSecondaryRemoteSwitch.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(611, 234);
+            this.Controls.Add(this.buttonDeviceSecondaryRemoteSwitch);
+            this.Controls.Add(this.buttonDeviceSecondaryLocalSwitch);
+            this.Controls.Add(this.buttonDevicePrimaryRemoteSwitch);
+            this.Controls.Add(this.buttonDevicePrimaryLocalSwitch);
             this.Controls.Add(this.buttonDevicesReset);
             this.Controls.Add(this.textBoxDevicesFilter);
             this.Controls.Add(this.label5);
@@ -207,6 +254,10 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBoxDevicesFilter;
         private System.Windows.Forms.Button buttonDevicesReset;
+        private System.Windows.Forms.Button buttonDevicePrimaryLocalSwitch;
+        private System.Windows.Forms.Button buttonDevicePrimaryRemoteSwitch;
+        private System.Windows.Forms.Button buttonDeviceSecondaryLocalSwitch;
+        private System.Windows.Forms.Button buttonDeviceSecondaryRemoteSwitch;
     }
 }
 
