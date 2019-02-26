@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static WindowsFormsApp1.HidLibraryExt;
 using static WindowsFormsApp1.Log;
 
 /// <summary>
@@ -86,6 +87,12 @@ namespace WindowsFormsApp1
     public partial class Form1 : Form
     {
         private static readonly string TAG = Log.TAG(typeof(Form1));
+
+        private const int SWITCH_GUS231_VID = 0x0557; // ATEN
+        private const int SWITCH_GUS231_PID = 0x2405; // 2 port switch
+        private const string SWITCH_GUS231_VERSION = "0.0.49.2"; // 0x00003102 (12546)
+
+        private readonly HidDeviceId SWITCH_HID_DEVICE_ID = new HidDeviceId(SWITCH_GUS231_VID, SWITCH_GUS231_PID, new Version(SWITCH_GUS231_VERSION));
 
         public Form1()
         {
@@ -204,8 +211,8 @@ namespace WindowsFormsApp1
                                                 DEV_BROADCAST_DEVICEINTERFACE pDevice = (DEV_BROADCAST_DEVICEINTERFACE)Marshal.PtrToStructure(lParam, typeof(DEV_BROADCAST_DEVICEINTERFACE));
                                                 var deviceName = pDevice.dbcc_name;
                                                 Log.PrintLine(TAG, LogLevel.Information, $"WndProc {changeType} pDevice.dbcc_name={Utils.Quote(deviceName)}");
-                                                deviceName = CleanUpDeviceInterfaceName(deviceName);
                                                 /*
+                                                deviceName = CleanUpDeviceInterfaceName(deviceName);
                                                 if (DeviceNamesSubscribed.Contains(deviceName))
                                                 {
                                                     OnUsbChange?.Invoke(this, new UsbChangeEventArgs(changeType, deviceName));
@@ -405,7 +412,7 @@ namespace WindowsFormsApp1
                 comboBox.Items.Clear();
             }
 
-            var devices = HidLibraryExt.Enumerate(0x0557, 0x2405, 0x00003102);
+            var devices = HidLibraryExt.Enumerate(SWITCH_HID_DEVICE_ID);
 
             foreach (var device in devices)
             {
@@ -572,7 +579,7 @@ namespace WindowsFormsApp1
             //var devicePath = comboBoxDevicesPrimaryRemote.SelectedItem as string;
             //var hidDevice = new HidDevice(deviceName);
             //var device = HidDevices.GetDevice(devicePath);
-            var devices = HidLibraryExt.Enumerate(0x0557, 0x2405, 0x00003102);
+            var devices = HidLibraryExt.Enumerate(SWITCH_HID_DEVICE_ID);
             // DevicePath "\\\\?\\hid#vid_0557&pid_2405&mi_01#7&2ac3b27&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}"
             // DevicePath "\\\\?\\hid#vid_0557&pid_2405&mi_01#7&19802bc4&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}"
             foreach (var device in devices)

@@ -5,32 +5,46 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace HidLibrary
+namespace WindowsFormsApp1
 {
-    public static class HidLibraryExt
+    public class HidLibraryExt
     {
+        public class HidDeviceId
+        {
+            public int VendorId { get; private set; }
+            public int ProductId { get; private set; }
+            public Version Version { get; private set; }
+
+            public HidDeviceId(int vendorId, int productId, Version version)
+            {
+                VendorId = vendorId;
+                ProductId = productId;
+                Version = version;
+            }
+        }
+
         public static Version newVersion(int version)
         {
-            var major = (int)((version & 0xFF000000) >> 6);
-            var minor = (version & 0x00FF0000) >> 4;
-            var build = (version & 0x0000FF00) >> 2;
+            var major = (int)((version & 0xFF000000) >> 24);
+            var minor = (version & 0x00FF0000) >> 16;
+            var build = (version & 0x0000FF00) >> 8;
             var revision = version & 0x000000FF;
             return new Version(major, minor, build, revision);
         }
 
-        public static IEnumerable<HidDevice> Enumerate(int vendorId, int productId, int version)
+        public static IEnumerable<HidDevice> Enumerate(HidDeviceId hidDeviceId, bool includeGreaterThan = false)
         {
-            return HidDevices.Enumerate(vendorId, productId)
+            return HidDevices.Enumerate(hidDeviceId.VendorId, hidDeviceId.ProductId)
                 .Where(x => {
-                    if (x.Attributes.VendorId != vendorId)
+                    var xAttributesVersion = newVersion(x.Attributes.Version);
+                    if (includeGreaterThan)
                     {
-                        return false;
+                        return xAttributesVersion >= hidDeviceId.Version;
                     }
-                    if (x.Attributes.ProductId != productId)
+                    else
                     {
-                        return false;
+                        return xAttributesVersion == hidDeviceId.Version;
                     }
-                    return newVersion(x.Attributes.Version) >= newVersion(version);
                 });
         }
     }
