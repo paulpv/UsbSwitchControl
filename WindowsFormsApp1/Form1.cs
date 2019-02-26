@@ -583,10 +583,11 @@ namespace WindowsFormsApp1
 
         private enum Gub231SwitchCommands
         {
-            Cancel = 0x10, // CMD_CANCEL
-            Switch = 0x11, // CMD_SWITCH
-            Lock = 0x21,   // CMD_LOCK
-            Unlock = 0x20  // CMD_UNLOCK
+            Cancel = 0x10,   // CMD_CANCEL
+            Switch = 0x11,   // CMD_SWITCH
+            Lock = 0x21,     // CMD_LOCK
+            Unlock = 0x20,   // CMD_UNLOCK
+            KeepAlive = 0x40 // CMD_KEEP_ALIVE ?
         }
 
         /// <summary>
@@ -597,10 +598,18 @@ namespace WindowsFormsApp1
         /// Set breakpoint in:
         ///     kernel32.dll WriteFile
         ///     kernel32.dll OutputDebugStringW
-        /// 00AD6FFA | 68 9872AE00              | push uswitch.AE7298                     | AE7298:L"SendCmdToSwitch(CMD_CANCEL) 0x10.case CMD_CANCEL"
-        /// 00AD7043 | 68 3072AE00              | push uswitch.AE7230                     | AE7230:L"SendCmdToSwitch(CMD_SWITCH) 0x11.case CMD_SWITCH"
-        /// 00AD7069 | 68 D071AE00              | push uswitch.AE71D0                     | AE71D0:L"SendCmdToSwitch(CMD_LOCK) 0x21.case CMD_LOCK"
-        /// 00AD70A6 | 68 6871AE00              | push uswitch.AE7168                     | AE7168:L"SendCmdToSwitch(CMD_UNLOCK) 0x20.case CMD_UNLOCK"
+        /// 00AD46E0 | 55                       | push ebp                                          | possibly "GetPortInformaiton" (sic)
+        /// 00AD5180 | 55                       | push ebp                                          | possibly enumerating GUB231 devices...
+        /// 00AD5777 | 8B0D 10B0AE00            | mov ecx,dword ptr ds:[AEB010]                     | 00AEB010:&L"Ver %d.%d.%d%d%d"
+        /// 00AD5B70 | 55                       | push ebp                                          | SendCmdToSwitch...
+        /// ...
+        /// 00AD623C | 8B1D 1842AE00            | mov ebx,dword ptr ds:[&Shell_NotifyIconW>]        |
+        /// 00AD62EE | FF15 7C42AE00            | call dword ptr ds:[&UnregisterDeviceNotification  |
+        /// 00AD6FFA | 68 9872AE00              | push uswitch.AE7298                               | AE7298:L"SendCmdToSwitch(CMD_CANCEL) 0x10.case CMD_CANCEL"
+        /// 00AD7043 | 68 3072AE00              | push uswitch.AE7230                               | AE7230:L"SendCmdToSwitch(CMD_SWITCH) 0x11.case CMD_SWITCH"
+        /// 00AD7069 | 68 D071AE00              | push uswitch.AE71D0                               | AE71D0:L"SendCmdToSwitch(CMD_LOCK) 0x21.case CMD_LOCK"
+        /// 00AD70A6 | 68 6871AE00              | push uswitch.AE7168                               | AE7168:L"SendCmdToSwitch(CMD_UNLOCK) 0x20.case CMD_UNLOCK"
+        /// 00AD7812 | 68 2078AE00              | push uswitch.AE7820                               | AE7820:L"IDM_NEW_SWITCH   SendCmdToSwitch(index, CMD_SWITCH)"
         /// </summary>
         /// <param name="device"></param>
         /// <param name="cmd"></param>
